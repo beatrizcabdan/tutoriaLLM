@@ -51,3 +51,4 @@ This repository provides examples for using **Ollama** and **OpenAI** with Pytho
    ```bash
    python 5_openai.py
    ```
+* The example relies on a file `oepnai_key.txt` that you can create on your own. Do not share that file with anyone 💀.
