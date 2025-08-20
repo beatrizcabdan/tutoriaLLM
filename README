@@ -1,0 +1,13 @@
+OLLAMA
+1. Dowload Ollama from ollama.com
+2. Activate plane mode in Ollama if you are using sensitive info
+3. Open a terminal and write ollama pull XXXX
+3.1. XXXX is whichever model and version you want to use from ollama.com/library
+3.2. Strong recommendation: run "ollama list" and store the ID of the model you downloaded
+4. Install ollama library for Python using "pip install ollama"
+5. Try running "1_basic.py" and "2_images.py"
+
+OPENAI
+1. Install Python package openai
+1.2. Install PIL with pip install pillow
+2. Run "5_openai.py"
