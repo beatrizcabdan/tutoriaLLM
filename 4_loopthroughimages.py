@@ -1,7 +1,7 @@
 from ollamacalls import safe_chat
 import os
 
-model = "llava"
+model = "llama3.2-vision"
 prompt = "Is the driver attentive?"
 
 images = ["images/" + f for f in os.listdir("images/") if os.path.isfile(os.path.join("images/", f))]
