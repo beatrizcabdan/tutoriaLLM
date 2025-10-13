@@ -6,44 +6,50 @@ from PIL import Image
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 
-def chat_openai(client, model, prompt, image, timeout_seconds=40):
+def chat_openai_image(client, model, prompt, image, timeout_seconds=40, verbose=True):
     with ThreadPoolExecutor(max_workers=1) as ex:
-        future = ex.submit(call_openai_chat, client, model, prompt, image)
+        future = ex.submit(call_openai_image, client, model, prompt, image)
         try:
-            print(f"Prompting {model} with timeout {timeout_seconds}s")
+            if verbose: print(f"Prompting {model}: {prompt}")
             return future.result(timeout=timeout_seconds)
         except TimeoutError:
-            print(f"Timeout after {timeout_seconds} seconds.")
+            if verbose: print(f"Timeout after {timeout_seconds} seconds.")
             return "Timeout."
         except Exception as e:
-            print(f"Chat call failed: {e}")
+            if verbose: print(f"Chat call failed: {e}")
             return "Failure."
 
 
-def chat_ollama(model, prompt, image, timeout_seconds=40):
+def chat_ollama(model, prompt, image=None, timeout_seconds=40, verbose=True):
     with multiprocessing.Pool(processes=1) as pool:
-        async_result = pool.apply_async(call_ollama_chat, (model, prompt, image))
+        if image is None:
+            async_result = pool.apply_async(call_ollama_chat, (model, prompt))
+        else:
+            async_result = pool.apply_async(call_ollama_image, (model, prompt, image))
         try:
-            print(f"Prompting {model} with timeout {timeout_seconds}s")
+            if verbose: print(f"Prompting {model}: {prompt}")
             result = async_result.get(timeout=timeout_seconds)
             return result
         except multiprocessing.TimeoutError:
-            print(f"Timeout after {timeout_seconds} seconds.")
+            if verbose: print(f"\nTimeout after {timeout_seconds} seconds.")
             pool.terminate()
             pool.join()
-            return "Timeout."
+            return {'message': {'content': "Timeout."}}
         except Exception as e:
-            print(f"Chat call failed: {e}")
+            if verbose: print(f"\nChat call failed: {e}")
             pool.terminate()
             pool.join()
-            return "Failure."
+            return {'message': {'content': "Failure."}}
+
+def call_ollama_chat(current_model, prompt):
+    return ollama.chat(model=current_model, messages=[{'role': 'user', 'content': prompt}])
 
 
-def call_ollama_chat(current_model, prompt, image):
+def call_ollama_image(current_model, prompt, image):
     return ollama.chat(model=current_model, messages=[{'role': 'user', 'content': prompt, 'images': [image]}])
 
 
-def call_openai_chat(openai, model, prompt, image):
+def call_openai_image(openai, model, prompt, image):
     encoded_string = encode_image(image, 2048)
     response = openai.chat.completions.create(model=model, messages=[{"role": "user", "content": [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encoded_string}", }, }, ], }], max_tokens=300, )
     return response.choices[0].message.content
