@@ -9,6 +9,7 @@ This repository provides examples for using **Ollama** and **OpenAI** with Pytho
 * `3_safecall.py` → Image interpretation with Ollama (fail safe mode)
 * `4_loopthroughimages.py` → Images interpretation with Ollama (looping through images in a folder)
 * `5_openai.py` → Image interpretation with OpenAI (fail safe mode)
+* `6_elapsedtime.py` → Elapsed time when calling a model (test before running a lot of tests to estimate time)
 
 ---
 
