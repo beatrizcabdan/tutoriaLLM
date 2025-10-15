@@ -1,10 +1,10 @@
 from LLMcalls import chat_ollama
-import os
+import utils
 
 model = "llama3.2-vision"
 prompt = "Is the driver attentive?"
 
-images = ["images/" + f for f in os.listdir("images/") if os.path.isfile(os.path.join("images/", f))]
+images = utils.load_files_in_folder("images/")
 
 if __name__ == '__main__':
 	for image in images:

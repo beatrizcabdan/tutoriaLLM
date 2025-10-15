@@ -2,10 +2,10 @@ from LLMcalls import chat_ollama
 import time
 import numpy as np
 
-model = "gpt-oss"
+model = "gpt-oss:20b"
 prompt = "Hello!"
 reps = 10
-timeout_seconds = 40
+timeout_seconds = 10
 
 if __name__ == '__main__':
     times = []

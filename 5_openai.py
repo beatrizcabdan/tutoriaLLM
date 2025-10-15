@@ -1,5 +1,5 @@
 from openai import OpenAI
-from LLMcalls import chat_openai_image
+from LLMcalls import chat_openai
 
 if __name__ == '__main__':
     key = open("openai_key.txt", 'r').read()
@@ -9,5 +9,5 @@ if __name__ == '__main__':
     prompt = "Is the driver attentive?"
     image = "images/frame1.png"
 
-    response = chat_openai_image(openai, model, prompt, image)
+    response = chat_openai(openai, model, prompt, image)
     print(response)

@@ -6,17 +6,17 @@ from PIL import Image
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 
-def chat_openai_image(client, model, prompt, image, timeout_seconds=40, verbose=True):
+def chat_openai(client, model, prompt, image, timeout_seconds=40, verbose=True):
     with ThreadPoolExecutor(max_workers=1) as ex:
         future = ex.submit(call_openai_image, client, model, prompt, image)
         try:
             if verbose: print(f"Prompting {model}: {prompt}")
             return future.result(timeout=timeout_seconds)
         except TimeoutError:
-            if verbose: print(f"Timeout after {timeout_seconds} seconds.")
+            if verbose: print(f"\tTimeout after {timeout_seconds} seconds.")
             return "Timeout."
         except Exception as e:
-            if verbose: print(f"Chat call failed: {e}")
+            if verbose: print(f"\tChat call failed: {e}")
             return "Failure."
 
 
@@ -31,12 +31,12 @@ def chat_ollama(model, prompt, image=None, timeout_seconds=40, verbose=True):
             result = async_result.get(timeout=timeout_seconds)
             return result
         except multiprocessing.TimeoutError:
-            if verbose: print(f"\nTimeout after {timeout_seconds} seconds.")
+            if verbose: print(f"\tTimeout after {timeout_seconds} seconds.")
             pool.terminate()
             pool.join()
             return {'message': {'content': "Timeout."}}
         except Exception as e:
-            if verbose: print(f"\nChat call failed: {e}")
+            if verbose: print(f"\tChat call failed: {e}")
             pool.terminate()
             pool.join()
             return {'message': {'content': "Failure."}}
