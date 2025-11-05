@@ -4,11 +4,15 @@ from io import BytesIO
 import base64
 from PIL import Image
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+import csv
 
 
-def chat_openai(client, model, prompt, image, timeout_seconds=40, verbose=True):
+def chat_openai(client, model, prompt, image=None, timeout_seconds=40, verbose=True):
     with ThreadPoolExecutor(max_workers=1) as ex:
-        future = ex.submit(call_openai_image, client, model, prompt, image)
+        if image is None:
+            future = ex.submit(call_openai, client, model, prompt)
+        else:
+            future = ex.submit(call_openai_image, client, model, prompt, image)
         try:
             if verbose: print(f"Prompting {model}: {prompt}")
             return future.result(timeout=timeout_seconds)
@@ -48,6 +52,9 @@ def call_ollama_chat(current_model, prompt):
 def call_ollama_image(current_model, prompt, image):
     return ollama.chat(model=current_model, messages=[{'role': 'user', 'content': prompt, 'images': [image]}])
 
+def call_openai(openai, model, prompt):
+    response = openai.chat.completions.create(model=model, messages=[{"role": "user", "content": [{"type": "text", "text": prompt}, ], }], max_tokens=300, )
+    return response.choices[0].message.content
 
 def call_openai_image(openai, model, prompt, image):
     encoded_string = encode_image(image, 2048)
@@ -70,3 +77,9 @@ def encode_image(image_path, max_image=512):
     img.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return img_str
+
+def add_to_csv(filename, row, new=False):
+    mode = 'w' if new else 'a+'
+    with (open(filename, mode=mode, newline='') as file):
+        writer = csv.writer(file, delimiter=';')
+        writer.writerow(row)
