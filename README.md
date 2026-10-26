@@ -10,6 +10,7 @@ This repository provides examples for using **Ollama** and **OpenAI** with Pytho
 * `4_loopthroughimages.py` → Images interpretation with Ollama (looping through images in a folder)
 * `5_openai.py` → Image interpretation with OpenAI (fail safe mode)
 * `6_elapsedtime.py` → Elapsed time when calling a model (test before running a lot of tests to estimate time)
+* `8_save_csv.py` and `9_composite_prompt.py` might be useful to you if you want to run complex prompts and save the results of all combinations in a spreadsheet!
 
 ---
 
