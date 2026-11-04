@@ -81,5 +81,5 @@ def encode_image(image_path, max_image=512):
 def add_to_csv(filename, row, new=False):
     mode = 'w' if new else 'a+'
     with (open(filename, mode=mode, newline='') as file):
-        writer = csv.writer(file, delimiter=';')
+        writer = csv.writer(file, delimiter=',')
         writer.writerow(row)
