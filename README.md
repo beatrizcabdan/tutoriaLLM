@@ -1,56 +1,37 @@
-# Usage guide
+# README
 
-This repository provides examples for using **Ollama** and **OpenAI** with Python.
+## Description
 
-## 📂 Examples
+The purpose of this repository was to experiment with local LLMs using Ollama.
+We created a python script that sends the same prompt to two different models and saves their responses in a CSV-file.
 
-* `1_basic.py` → Basic Ollama example (text only)
-* `2_images.py` → Image interpretation with Ollama
-* `3_safecall.py` → Image interpretation with Ollama (fail safe mode)
-* `4_loopthroughimages.py` → Images interpretation with Ollama (looping through images in a folder)
-* `5_openai.py` → Image interpretation with OpenAI (fail safe mode)
-* `6_elapsedtime.py` → Elapsed time when calling a model (test before running a lot of tests to estimate time)
-* `8_save_csv.py` and `9_composite_prompt.py` might be useful to you if you want to run complex prompts and save the results of all combinations in a spreadsheet!
+**Models used:**
+
+- `Qwen3:4b`
+- `Gemma3:4b`
 
 ---
 
-## 🚀 OLLAMA
+## 🚀 How To Run
 
-1. Download Ollama from [ollama.com](https://ollama.com).
-2. **Recommended**: activate plane mode in Ollama if you are working with sensitive information.
-3. Open a terminal and run:
-   ```bash
-   ollama pull XXXX
+1. Python installed
+2. Ollama installed and running
+3. Qwen3:4b and Gemma 3:4b downloaded through Ollama
+4. Run the script in your IDE terminal:
+   `python .\10_call_models.py`
 
-* `XXXX` is the model and version you want from [ollama.com/library](https://ollama.com/library).
-* **Recommended**: run
-  ```bash
-  ollama list
-  ```
-  and store the ID of the model you downloaded (you might need to report this, later on).
-
-4. Install the Python library:
-   ```bash
-   pip install ollama
-   ```
-5. Try running the examples:
-   ```bash
-   python 1_basic.py
-   ```
+The script sends the same prompt to both models one at a time, and saves the responses in `results.csv`
 
 ---
 
-## 🔑 OPENAI
+## Our observations
 
-1. Get an OpenAI API key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
-2. Install the Python packages:
+Both models were pretty slow generating responses. We occasionally experienced timeouts, especially with Qwen3:4b.
 
-   ```bash
-   pip install openai
-   pip install pillow
-   ```
-3. Run an example:
-   ```bash
-   python 5_openai.py
-   ```
-* The example relies on a file `oepnai_key.txt` that you can create on your own. Do not share that file with anyone 💀.
+The order in which the models were executed seemed to affect the performance. Running a model requires a huge amount of RAM, running one model first seems to affect the available memory the the second model.
+
+The responses was much less accurate than those from larger commerical language models like OpenAIs GPT models or Anthropics Claude models.
+
+Both models was able to answer simple questions correctly, like "what is the capital of Sweden" or common riddles. However they sometimes hallucinated answers. For example, Gemma 3:4b answered "This is a classic riddle The answer is a table" to the trick question "What has two legs but cannot drive a motorcycle?". The models also tended to give really long answers even to simple questions.
+
+To summarize, the models performed OK on simple questions but was not reliable when handling unusual prompts.

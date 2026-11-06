@@ -10,7 +10,7 @@ def clean_string_regex(input_string):
 
 if __name__ == '__main__':
     models = ["qwen3:4b", "gemma3:4b"]
-    prompt = "What gets wetter the more it dries?"
+    prompt = "What has two legs but cannot drive a motorcycle?"
 
     filename = "results.csv"
 
