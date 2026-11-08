@@ -35,8 +35,8 @@ class TestApp(unittest.TestCase):
 
     # WRONG MODEL
     def test_unknown_model_returns_failure(self):
-        response = chat_ollama("no-such-model", "Hello", verbose=False)
-        self.assertEqual(response['message']['content'], "Failure.")
+        response = ask_capital("Sweden", "no-such-model")
+        self.assertEqual(response, "Failure.")
 
     # CONSISTENCY TEST
     def test_knows_capital_of_sweden(self):
